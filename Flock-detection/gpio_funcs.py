@@ -9,7 +9,11 @@ import subprocess
 import json
 import csv
 from datetime import datetime
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+    GPIO_AVAILABLE = True
+except ImportError:
+    GPIO_AVAILABLE = False
 
 def setup_gpio(state, GPIO_AVAILABLE):
     if not GPIO_AVAILABLE:
