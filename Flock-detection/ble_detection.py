@@ -8,7 +8,7 @@ except ImportError:
     BLE_AVAILABLE = False
 
 #Asynchronous BLE detection and scanning loop
-async def ble_scanner_loop(state):
+async def ble_scanner_loop(state, state_lock, csv_file):
     """Asynchronous background loop scanning for diagnostic BLE indicators."""
     if not BLE_AVAILABLE:
         return
@@ -26,7 +26,7 @@ async def ble_scanner_loop(state):
 
                 # Fingerprint match 1: Target OUI check
                 if mac[:8] in FLOCK_OUIS:
-                    record_detection(mac, "Flock Controller (BLE)", "ble_oui", rssi, f"Name: {name}")
+                    record_detection(mac, state, state_lock, csv_file, "Flock Controller (BLE)", "ble_oui", rssi, f"Name: {name}")
                     continue
 
                 # Fingerprint match 2: Company ID check
@@ -44,6 +44,6 @@ async def ble_scanner_loop(state):
             await asyncio.sleep(2)
         await asyncio.sleep(1.5)
 
-def run_async_ble():
+def run_async_ble(state, state_lock, csv_file):
     if BLE_AVAILABLE:
-        asyncio.run(ble_scanner_loop())
+        asyncio.run(ble_scanner_loop(state, state_lock, csv_file))

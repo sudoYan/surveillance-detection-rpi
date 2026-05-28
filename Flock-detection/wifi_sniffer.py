@@ -36,7 +36,7 @@ def channel_hopper_thread(state, interface):
         idx = (idx + 1) % len(channels)
         time.sleep(0.350)  # 350ms dwell time per channel
 
-def wifi_packet_callback(pkt, state):
+def wifi_packet_callback(pkt, state, state_lock, csv_file):
     """Callback triggered on every 802.11 frame captured in promiscuous mode."""
     if not pkt.haslayer(Dot11):
         return
@@ -70,6 +70,9 @@ def wifi_packet_callback(pkt, state):
             if oui in FLOCK_OUIS:
                 record_detection(
                     mac=addr2,
+                    state= state,
+                    state_lock= state_lock,
+                    csv_file= csv_file,
                     device_type="Flock ALPR (Solar/Battery)",
                     method="wifi_wildcard_probe",
                     rssi=rssi,
@@ -83,6 +86,9 @@ def wifi_packet_callback(pkt, state):
         if oui in FLOCK_OUIS:
             record_detection(
                 mac=addr2,
+                state= state,
+                state_lock= state_lock,
+                csv_file= csv_file,
                 device_type="Flock Device",
                 method="wifi_oui_addr2",
                 rssi=rssi,
@@ -96,6 +102,9 @@ def wifi_packet_callback(pkt, state):
         if oui in FLOCK_OUIS:
             record_detection(
                 mac=addr1,
+                state= state,
+                state_lock= state_lock,
+                csv_file= csv_file,
                 device_type="Flock Infrastructure Target",
                 method="wifi_oui_addr1",
                 rssi=rssi,

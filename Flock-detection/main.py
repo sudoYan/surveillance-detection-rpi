@@ -79,27 +79,27 @@ if __name__ == "__main__":
     #setup_gpio()
 
     # 1. Start Channel Hopper Thread
-    hopper = threading.Thread(target=channel_hopper_thread, args=(state["interface"],), daemon=True)
+    hopper = threading.Thread(target=channel_hopper_thread(state, state["interface"]), args=(), daemon=True)
     hopper.start()
 
     # 2. Start GPS Thread (if passed)
     if args.gps:
-        gps_t = threading.Thread(target=gps_reader_thread, args=(args.gps,), daemon=True)
+        gps_t = threading.Thread(target=gps_reader_thread(SERIAL_AVAILABLE, state, state_lock), args=(args.gps), daemon=True)
         gps_t.start()
 
     # 3. Start BLE Scanner Thread
     if BLE_AVAILABLE:
-        ble_t = threading.Thread(target=run_async_ble, daemon=True)
+        ble_t = threading.Thread(target=run_async_ble(state, state_lock, csv_file), args=(), daemon=True)
         ble_t.start()
 
     # 4. Start Dashboard TUI Update Thread
-    dash_t = threading.Thread(target=print_dashboard, daemon=True)
+    dash_t = threading.Thread(target=print_dashboard(state, state_lock, BLE_AVAILABLE), args=(), daemon=True)
     dash_t.start()
 
     # 5. Execute Core WiFi Sniffer Loop
     print(f"[*] Sniffing active on interface {state['interface']}...")
     try:
-        sniff(iface=state["interface"], prn=wifi_packet_callback, store=0)
+        sniff(iface=state["interface"], prn=wifi_packet_callback(state=state, state_lock=state_lock, csv_file=csv_file), store=0)
     except KeyboardInterrupt:
         print("\n[*] Shutting down tracking systems. Session ended.")
     finally:

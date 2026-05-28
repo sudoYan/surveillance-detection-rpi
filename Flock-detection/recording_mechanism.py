@@ -1,5 +1,5 @@
 # PROCESS DETECTIONS (Unified Core Logic)
-from gpio_funcs import trigger_alert
+#from gpio_funcs import trigger_alert
 from ui_detector import print_alert_box
 from datetime import datetime
 import os
@@ -51,5 +51,5 @@ def record_detection(mac, state, state_lock, csv_file, device_type, method, rssi
                 print(f"[-] Database Write Error: {e}")
 
             # Draw alert card to console
-            print_alert_box(mac, device_type, method, rssi, lat, lon)
-            trigger_alert()
+            print_alert_box(csv_file, mac, device_type, method, rssi, lat, lon)
+            #trigger_alert(state, GPIO_AVAILABLE)
