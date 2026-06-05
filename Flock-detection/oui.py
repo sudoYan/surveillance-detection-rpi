@@ -13,6 +13,10 @@ FLOCK_OUIS = {
     "90:35:ea", "5c:93:a2", "64:6e:69", "48:27:ea", "b4:1e:52",
     # Special Community-discovered OUI signatures
     "82:6b:f2", "e0:0a:f6"
+    #DEBUG
+    "f8:bc:12", "00:0c:8a", "04:52:c7", "08:df:1f", "28:11:a5",
+    "2c:41:a1", "4c:87:5d", "60:ab:d2", "68:f2:1f", "78:2b:64",
+    "ac:bf:71", "bc:87:fa", "c8:7b:23", "e4:58:bc"
 }
 
 # BLE Specific fingerprints (Axon/Flock/Raven beacons)
